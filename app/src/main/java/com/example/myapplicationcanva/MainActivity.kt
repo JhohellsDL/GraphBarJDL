@@ -73,20 +73,14 @@ class MainActivity : AppCompatActivity() {
     ) {
         val canva = Canvas(mybitmap)
 
-        val width = 20  // ancho de la barra 20dp
-        val height = 262 // altura maxima de la barra 262dp
-
         val frameHeight = dpToFloat(alto2) // take the frame height
 
+        val widthBar = locationBar + 10 // 10 because the stroke is 10
         val startLocation = dpToFloat(locationBar)
         val endLocation = dpToFloat(locationBar + 10)
-        val widthBar = locationBar + 10 // 10 because the stroke is 10
-
-        binding.text1.text = frameHeight.toString()
 
         val top = frameHeight + 10 // coordinate where start the bar - base
-        val bottom =
-            frameHeight - dpToFloat(heightBar) // frame height minus the bar size or consumption
+        val bottom = frameHeight - dpToFloat(heightBar) // frame height minus the bar size or consumption
 
         val startTextX = bottom - dpToFloat(12)
         val startTextY = startLocation - dpToFloat(11) // eje Y
@@ -116,16 +110,6 @@ class MainActivity : AppCompatActivity() {
             startTextMonthY,
             paintTextMonth
         )
-    }
-
-
-    private fun dibujarRectanguloRedondeado(mybitmap: Bitmap, paint: Paint) {
-        val canva = Canvas(mybitmap)
-        val ancho1 = 20f
-        val ancho2 = 320f
-
-        canva.drawRoundRect(30f, 10f, 20f, 320f, 10f, 10f, paint)
-        //canva.drawText("hola",30,40,30f,30f,paint)
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------- DRAWING CHOPPY LINE
@@ -178,11 +162,11 @@ class MainActivity : AppCompatActivity() {
         val listsConsumeData: List<ConsumoData> = listOf(
             ConsumoData(
                 periodo = "2022-05",
-                consumo = 131
+                consumo = 500
             ),
             ConsumoData(
                 periodo = "2022-06",
-                consumo = 262
+                consumo = 1000
             ),
             ConsumoData(
                 periodo = "2022-07",
@@ -194,9 +178,8 @@ class MainActivity : AppCompatActivity() {
             ),
             ConsumoData(
                 periodo = "2022-09",
-                consumo = 240
+                consumo = 600
             ),
-            /*
             ConsumoData(
                 periodo = "2022-10",
                 consumo = 91
@@ -206,17 +189,30 @@ class MainActivity : AppCompatActivity() {
                 consumo = 240
             ),
 
-             */
-
         )
 
-        // Bitmap of graph bar
-        val myBitmap: Bitmap =
-            Bitmap.createBitmap(
+        val cont = listsConsumeData.size
+        val plusWidth = (cont-5)*52
+
+        val myBitmap: Bitmap
+        if (cont <= 5){
+            myBitmap = Bitmap.createBitmap(
                 dpToInt(ancho),
                 dpToInt(alto),
                 Bitmap.Config.ARGB_8888
             )
+        }else{
+            myBitmap = Bitmap.createBitmap(
+                dpToInt(ancho+plusWidth),
+                dpToInt(alto),
+                Bitmap.Config.ARGB_8888
+            )
+
+            binding.scrollViewBar.setBackgroundColor(Color.GREEN)
+            binding.scrollViewBar.scrollTo(0,0)
+        }
+        // Bitmap of graph bar
+
         // Bitmap of background choppy line
         val myBitmap2: Bitmap =
             Bitmap.createBitmap(
@@ -227,29 +223,106 @@ class MainActivity : AppCompatActivity() {
         val canvas = Canvas(myBitmap)
         val canvas2 = Canvas(myBitmap2)
         
-        canvas.drawColor(Color.TRANSPARENT)
+        canvas.drawColor(Color.GRAY)
         canvas2.drawColor(Color.TRANSPARENT)
         
         val paintTextConsumed = typePaintText(10, Color.BLACK)
         val paintTextMonth = typePaintText(14, Color.BLACK)
+        val paintTextGuide = typePaintText(12, 0XFFD7DBF5.toInt())
 
         val paintBar = typePaint(0XFF6464FA.toInt(), dpToFloat(10)) // color purple ( 0XFF######) replace # with color
         val paintBaseLine = typePaint(0XFFD7DBF5.toInt(), 5.5f) // color gray
         val paintLineColor = typePaint(0XFFD7DBF5.toInt(), 2.75f) // color gray
         val paintCoverLine = typePaint(Color.WHITE, dpFloatToFloat(10.2f)) // color white and very thick
 
-        // --------------------------------------------------------------------- DRAWING CHOPPY LINE
+        // --------------------------------------------------------------------- DRAWING CHOPPY LINE---------------------
         val a = 56.4f // space between lines horizontals
+        val startTextGuide = dpFloatToFloat(56.4f)
         drawChoppyHorizontalLine(a, myBitmap2, paintLineColor)
         drawChoppyHorizontalLine((2 * a), myBitmap2, paintLineColor)
         drawChoppyHorizontalLine((3 * a), myBitmap2, paintLineColor)
         drawChoppyHorizontalLine((4 * a), myBitmap2, paintLineColor)
+        canvas2.drawText("1000",0f,startTextGuide-(dpFloatToFloat(8.4f)),paintTextGuide)
+        canvas2.drawText("400",0f,startTextGuide*2-(dpFloatToFloat(8.4f)),paintTextGuide)
+        canvas2.drawText("300",0f,startTextGuide*3-(dpFloatToFloat(8.4f)),paintTextGuide)
+        canvas2.drawText("100",0f,startTextGuide*4-(dpFloatToFloat(8.4f)),paintTextGuide)
 
         drawChoppyVerticalLine(28f, myBitmap2, paintLineColor)
 
-        // ----------------------------------------------------------------------------- DRAWING BAR
+        // ----------------------------------------------------------------------------- DRAWING BAR ---------------------
 
         var startBars = 32 // is padding in dp, add 52dp for space
+
+        val listConsumedInt: MutableList<Int> = mutableListOf()
+        listsConsumeData.forEach(){
+            listConsumedInt.add(it.consumo)
+        }
+
+        val min = listConsumedInt.min()
+        val max = listConsumedInt.max()
+
+
+        if (listConsumedInt.size <= 5){
+            listsConsumeData.forEach() {
+                val consumedInt = (it.consumo * 262)/max
+                //val consumedInt = listsConsumeData[it].consumo
+
+                val consumedString = it.consumo.toString()
+                val month = fetchMonthConsumed(it)
+                drawBarMonth(
+                    consumedString,
+                    consumedInt,
+                    month,
+                    startBars,
+                    myBitmap,
+                    paintBar,
+                    paintTextConsumed,
+                    paintTextMonth
+                )
+                startBars += 52
+            }
+        }else{
+            listsConsumeData.forEach() {
+                val consumedInt = (it.consumo * 262)/max
+                //val consumedInt = listsConsumeData[it].consumo
+
+                val consumedString = it.consumo.toString()
+                val month = fetchMonthConsumed(it)
+                drawBarMonth(
+                    consumedString,
+                    consumedInt,
+                    month,
+                    startBars,
+                    myBitmap,
+                    paintBar,
+                    paintTextConsumed,
+                    paintTextMonth
+                )
+                startBars += 52
+            /*
+            repeat(5){
+                cont --
+                val consumedInt = (listsConsumeData[cont].consumo * 262)/max
+                //val consumedInt = listsConsumeData[it].consumo
+
+                val consumedString = listsConsumeData[cont].consumo.toString()
+                val month = fetchMonthConsumed(listsConsumeData[cont])
+                drawBarMonth(
+                    consumedString,
+                    consumedInt,
+                    month,
+                    startBars,
+                    myBitmap,
+                    paintBar,
+                    paintTextConsumed,
+                    paintTextMonth
+                )
+                startBars += 52
+*/
+            }
+        }
+
+        /*
         listsConsumeData.forEach() {
             val consumed = it.consumo.toString()
             val month = fetchMonthConsumed(it)
@@ -265,6 +338,7 @@ class MainActivity : AppCompatActivity() {
             )
             startBars += 52
         }
+        */
 
         val startY = dpToFloat(alto2 + 5)
         val endX = dpToFloat(ancho)
@@ -272,18 +346,7 @@ class MainActivity : AppCompatActivity() {
 
         canvas.drawLine(0f, dpToFloat(alto2 - 1), dpToFloat(ancho), dpToFloat(alto2 - 1), paintBaseLine)
         canvas.drawLine(0f, startY, endX, endY, paintCoverLine)
-/*
-        dibujarBarra(262,21,mybitmap, paint1)
-        dibujarBarra(131,73,mybitmap, paint1)
-        dibujarBarra(131,125,mybitmap, paint1)
-        dibujarBarra(131,177,mybitmap, paint1)
-*/
-        //dibujarRectanguloRedondeado(mybitmap,paint0)
-        //dibujarRectanguloRedondeado(mybitmap,paint1)
-        //canva.drawText("hola",50,90,20f,20f,paint0)
-        //canva.drawRoundRect(10f,10f,30f,200f,5f,5f,paint0)
-        //canva.drawRoundRect(20f,15f,35f,210f,5f,5f,paint1)
-        //imagen.setImageBitmap(mybitmap)
+
         binding.imageView.setImageBitmap(myBitmap)
         binding.imageView2.setImageBitmap(myBitmap2)
     }
