@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:backgroundTint="@color/white"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardview"
+                android:layout_width="328dp"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:backgroundTint="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="363dp">
+
+                    <ImageView
+                        android:id="@+id/image_view2"
+                        android:layout_width="305dp"
+                        android:layout_height="282dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginStart="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                    <ImageView
+                        android:id="@+id/image_view"
+                        android:layout_width="280dp"
+                        android:layout_height="282dp"
+                        android:layout_marginTop="30dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/image_view"
+                        app:layout_constraintTop_toBottomOf="@id/image_view">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="30dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:textSize="14sp"
+                            android:textColor="@color/black"
+                            android:text="May"
+                            tools:text="May"/>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="30dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:textSize="14sp"
+                            android:textColor="@color/black"
+                            android:text="May"
+                            tools:text="May"/>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="30dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:textSize="14sp"
+                            android:textColor="@color/black"
+                            android:text="May"
+                            tools:text="May"/>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="30dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:textSize="14sp"
+                            android:textColor="@color/black"
+                            android:text="May"
+                            tools:text="May"/>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="30dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:textSize="14sp"
+                            android:textColor="@color/black"
+                            android:text="May"
+                            tools:text="May"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="ADIOS!!!"/>
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="ADIOS!!!"/>
+        <TextView
+            android:id="@+id/text3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="ADIOS!!!"/>
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
